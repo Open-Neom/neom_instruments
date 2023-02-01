@@ -8,7 +8,6 @@ export 'genres/domain/use_cases/genres_service.dart';
 //INSTRUMENTS DATA
 export 'instruments/data/firestore/profile_instruments_firestore.dart';
 //INSTRUMENTS DOMAIN
-export 'genres/domain/use_cases/genres_service.dart';
 export 'instruments/domain/repository/profile_instruments_repository.dart';
 export 'instruments/domain/use_cases/instrument_service.dart';
 export 'instruments/ui/widgets/instrument_widgets.dart';
