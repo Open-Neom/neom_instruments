@@ -13,11 +13,14 @@ dependencies:
     sdk: flutter
 
   neom_commons:
-    path: ../neom_commons
+    git:
+      url: https://github.com/Cyberneom/neom_commons.git
   neom_posts:
-    path: ../neom_posts
+    git:
+      url: https://github.com/Cyberneom/neom_posts.git
   neom_inbox:
-    path: ../neom_inbox
+    git:
+      url: https://github.com/Cyberneom/neom_inbox.git
 
 dev_dependencies:
   flutter_test:
