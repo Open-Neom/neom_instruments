@@ -44,8 +44,8 @@ class ProfileInstrumentsFirestore implements ProfileInstrumentsRepository {
     String instrumentId = "",
     String selfProfileId = "",
     Position? currentPosition,
-    int maxDistance = 60,
-    int maxProfiles = 20,
+    int maxDistance = 100,
+    int maxProfiles = 50,
   }) async {
 
     logger.d("RetrievingProfiles by specs");
