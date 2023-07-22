@@ -1,11 +1,11 @@
 name: neom_instruments
 description: Instruments and Genres for Cyberneom.
-version: 1.0.1
-homepage: https://github.com/emmanuel-montoya/neom_instruments
+version: 1.0.3
+homepage: https://github.com/Cyberneom/neom_instruments
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
-  sdk: '>=2.19.6 <3.0.0'
+  sdk: ">=3.0.0 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
@@ -30,8 +30,11 @@ dev_dependencies:
 dependency_overrides:
   neom_commons:
     path: ../neom_commons
+  neom_posts:
+    path: ../neom_posts
+  neom_inbox:
+    path: ../neom_inbox
   intl: 0.18.1
-
 
 # The following section is specific to Flutter packages.
 flutter:
