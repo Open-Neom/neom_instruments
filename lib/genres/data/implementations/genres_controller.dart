@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:neom_commons/core/data/firestore/genre_firestore.dart';
@@ -7,6 +8,7 @@ import 'package:neom_commons/core/data/implementations/app_drawer_controller.dar
 import 'package:neom_commons/core/data/implementations/user_controller.dart';
 import 'package:neom_commons/core/domain/model/app_profile.dart';
 import 'package:neom_commons/core/domain/model/genre.dart';
+import 'package:neom_commons/core/utils/app_color.dart';
 import 'package:neom_commons/core/utils/app_utilities.dart';
 import 'package:neom_commons/core/utils/constants/app_assets.dart';
 import 'package:neom_commons/core/utils/constants/app_page_id_constants.dart';
@@ -22,6 +24,8 @@ class GenresController extends GetxController implements GenresService {
   final RxMap<String, Genre> favGenres = <String,Genre>{}.obs;
   final RxMap<String, Genre> sortedGenres = <String,Genre>{}.obs;
   final RxBool isLoading = true.obs;
+
+  RxList<Genre> selectedGenres = <Genre>[].obs;
 
   AppProfile profile = AppProfile();
 
@@ -63,7 +67,7 @@ class GenresController extends GetxController implements GenresService {
 
 
   @override
-  Future<void>  addGenre(int index) async {
+  Future<void> addGenre(int index) async {
     logger.t("addGenre");
 
     Genre genre = sortedGenres.values.elementAt(index);
@@ -135,6 +139,43 @@ class GenresController extends GetxController implements GenresService {
       }
     }
 
+  }
+
+  Iterable<Widget> get genreChips sync* {
+
+    for (Genre genre in genres.values) {
+      yield Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: FilterChip(
+          backgroundColor: AppColor.main50,
+          avatar: CircleAvatar(
+            backgroundColor: Colors.cyan,
+            child: Text(genre.name[0].toUpperCase(),
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+          ),
+          label: Text(genre.name.capitalize, style: const TextStyle(fontSize: 12),),
+          selected: selectedGenres.contains(genre),
+          selectedColor: AppColor.main50,
+          onSelected: (bool selected) {
+            genre.isFavorite = true;
+            selected ? addGenreFromChips(genre) : removeGenreFromChips(genre);
+          },
+        ),
+      );
+    }
+  }
+
+  void addGenreFromChips(Genre genre) {
+    selectedGenres.add(genre);
+    update();
+  }
+
+  void removeGenreFromChips(Genre genre){
+    selectedGenres.removeWhere((g) {
+      return g == genre;
+    });
+    update();
   }
 
 
