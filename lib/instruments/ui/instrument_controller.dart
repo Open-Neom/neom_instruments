@@ -1,14 +1,16 @@
 import 'dart:convert';
+
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:neom_commons/core/data/firestore/instrument_firestore.dart';
 import 'package:neom_commons/core/data/implementations/app_drawer_controller.dart';
+import 'package:neom_commons/core/data/implementations/user_controller.dart';
 import 'package:neom_commons/core/domain/model/app_profile.dart';
 import 'package:neom_commons/core/domain/model/instrument.dart';
-import 'package:neom_commons/core/data/implementations/user_controller.dart';
 import 'package:neom_commons/core/utils/app_utilities.dart';
 import 'package:neom_commons/core/utils/constants/app_assets.dart';
 import 'package:neom_commons/core/utils/constants/app_page_id_constants.dart';
-import 'package:neom_commons/core/data/firestore/instrument_firestore.dart';
+
 import '../domain/use_cases/instrument_service.dart';
 
 class InstrumentController extends GetxController implements InstrumentService {
@@ -37,7 +39,7 @@ class InstrumentController extends GetxController implements InstrumentService {
   @override
   void onInit() async {
     super.onInit();
-    logger.d("Instruments Init");
+    logger.t("Instruments Init");
     await loadInstruments();
 
     if(userController.profile.instruments != null) {
@@ -52,7 +54,7 @@ class InstrumentController extends GetxController implements InstrumentService {
 
   @override
   Future<void> loadInstruments() async {
-    logger.d("");
+    logger.t("loadInstruments");
     String instrumentStr = await rootBundle.loadString(AppAssets.instrumentsJsonPath);
     
     List<dynamic> instrumentJSON = jsonDecode(instrumentStr);

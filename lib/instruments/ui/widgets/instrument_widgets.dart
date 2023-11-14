@@ -17,7 +17,7 @@ Widget buildInstrumentFavList(BuildContext context, InstrumentController _) {
       String instrumentLevel = instrument.instrumentLevel.name;
 
       return ListTile(
-          title: Text(instrument.name.tr.capitalizeFirst!),
+          title: Text(instrument.name.tr.capitalizeFirst),
           subtitle: Text(instrument.isMain ?
           "${AppTranslationConstants.mainInstrument.tr} ${instrumentLevel != AppTranslationConstants.notDetermined.tr ? " - $instrumentLevel" : ""}"
               : instrumentLevel != AppTranslationConstants.notDetermined.tr ? instrumentLevel : ""),
@@ -27,7 +27,8 @@ Widget buildInstrumentFavList(BuildContext context, InstrumentController _) {
               ),
               onPressed: () {
                 _.makeMainInstrument(instrument);
-                AppUtilities.showAlert(context, AppTranslationConstants.instrumentPreferences.tr, "${instrument.name.tr} ${AppTranslationConstants.selectedAsMainInstrument.tr}");
+                AppUtilities.showAlert(context, title: AppTranslationConstants.instrumentPreferences.tr,
+                    message: "${instrument.name.tr} ${AppTranslationConstants.selectedAsMainInstrument.tr}");
               })
       );
     },
@@ -45,7 +46,7 @@ Widget buildInstrumentList(BuildContext context, InstrumentController _) {
         instrument = _.favInstruments[instrument.id]!;
       }
       return ListTile(
-          title: Text(instrument.name.tr.capitalizeFirst!),
+          title: Text(instrument.name.tr.capitalizeFirst),
           trailing: IconButton(
               icon: Icon(
                 instrument.isFavorite ? Icons.remove : Icons.add,
@@ -55,19 +56,19 @@ Widget buildInstrumentList(BuildContext context, InstrumentController _) {
                   if (_.favInstruments.length > 1) {
                     await _.removeInstrument(index);
                     if(_.favInstruments.containsKey(instrument.id)) {
-                      AppUtilities.showAlert(context, instrument.name.tr, MessageTranslationConstants.instrumentNotRemoved.tr);
+                      AppUtilities.showAlert(context, title: instrument.name.tr, message: MessageTranslationConstants.instrumentNotRemoved.tr);
                     } else {
-                      AppUtilities.showAlert(context, instrument.name.tr, MessageTranslationConstants.instrumentRemoved.tr);
+                      AppUtilities.showAlert(context, title: instrument.name.tr, message: MessageTranslationConstants.instrumentRemoved.tr);
                     }
                   } else {
-                    AppUtilities.showAlert(context, instrument.name.tr, MessageTranslationConstants.atLeastOneInstrument.tr);
+                    AppUtilities.showAlert(context, title: instrument.name.tr, message: MessageTranslationConstants.atLeastOneInstrument.tr);
                   }
                 } else {
                   await _.addInstrument(index);
                   if(_.favInstruments.containsKey(instrument.id)) {
-                    AppUtilities.showAlert(context, instrument.name.tr, MessageTranslationConstants.instrumentAdded.tr);
+                    AppUtilities.showAlert(context, title: instrument.name.tr, message: MessageTranslationConstants.instrumentAdded.tr);
                   } else {
-                    AppUtilities.showAlert(context, instrument.name.tr, MessageTranslationConstants.instrumentNotAdded.tr);
+                    AppUtilities.showAlert(context, title: instrument.name.tr, message: MessageTranslationConstants.instrumentNotAdded.tr);
                   }
                 }
               }
