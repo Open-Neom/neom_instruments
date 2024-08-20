@@ -27,7 +27,7 @@ Widget buildInstrumentFavList(BuildContext context, InstrumentController _) {
               ),
               onPressed: () {
                 _.makeMainInstrument(instrument);
-                AppUtilities.showAlert(context, title: AppTranslationConstants.instrumentPreferences.tr,
+                AppUtilities.showAlert(context, title: AppTranslationConstants.instrumentsPreferences.tr,
                     message: "${instrument.name.tr} ${AppTranslationConstants.selectedAsMainInstrument.tr}");
               })
       );

@@ -9,7 +9,7 @@ import 'instrument_controller.dart';
 import 'widgets/instrument_widgets.dart';
 
 class InstrumentPage extends StatelessWidget {
-  const InstrumentPage({Key? key}) : super(key: key);
+  const InstrumentPage({super.key});
 
   @override
   Widget build(BuildContext context) {

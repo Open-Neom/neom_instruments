@@ -59,7 +59,7 @@ class ProfileInstrumentsFirestore implements ProfileInstrumentsRepository {
         for (var document in querySnapshot.docs) {
           AppProfile profile = AppProfile.fromProfileInstruments(document.data());
           profile.id = document.id;
-          if(profile.id != selfProfileId && profile.type == ProfileType.instrumentist
+          if(profile.id != selfProfileId && profile.type == ProfileType.artist
               && mainInstrumentProfiles.length < maxProfiles
           ) {
 

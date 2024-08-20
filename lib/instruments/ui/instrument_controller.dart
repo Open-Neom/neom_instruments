@@ -79,10 +79,9 @@ class InstrumentController extends GetxController implements InstrumentService {
     sortedInstruments[instrument.id]!.isFavorite = true;
 
     logger.i("Adding instrument ${instrument.name}");
-    if(await InstrumentFirestore().addInstrument(profileId: profile.id, instrumentId:  instrument.name)){
-      favInstruments[instrument.id] = instrument;
-    }
-
+    InstrumentFirestore().addInstrument(profileId: profile.id, instrumentId:  instrument.name);
+    favInstruments[instrument.id] = instrument;
+        
     sortFavInstruments();
     update([AppPageIdConstants.instruments]);
   }
@@ -95,10 +94,13 @@ class InstrumentController extends GetxController implements InstrumentService {
     sortedInstruments[instrument.id]!.isFavorite = false;
     logger.d("Removing instrument ${instrument.name}");
 
-    if(await InstrumentFirestore().removeInstrument(profileId: profile.id, instrumentId: instrument.id)){
-      favInstruments.remove(instrument.id);
-    }
+    ///DEPRECATED - NOT WAITING AS IS NOT NECESSARY TO VERIFY IT - ITS PREFERIBLE TO BE FASTER THAN CORRECT
+    // if(await InstrumentFirestore().removeInstrument(profileId: profile.id, instrumentId: instrument.id)){
+    //   favInstruments.remove(instrument.id);
+    // }
 
+    InstrumentFirestore().removeInstrument(profileId: profile.id, instrumentId: instrument.id);
+    favInstruments.remove(instrument.id);
     sortFavInstruments();
     update([AppPageIdConstants.instruments]);
   }
@@ -120,8 +122,9 @@ class InstrumentController extends GetxController implements InstrumentService {
       instrumentId: instrument.id, prevInstrId:  prevInstrId);
 
     profile.instruments![instrument.id] = instrument;
+    profile.mainFeature = instrument.name;
     Get.find<AppDrawerController>().updateProfile(profile);
-    update([AppPageIdConstants.instruments]);
+    update([AppPageIdConstants.instruments, AppPageIdConstants.profile]);
 
   }
 

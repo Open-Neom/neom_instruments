@@ -1,0 +1,11 @@
+dependency_overrides:
+  neom_commons:
+    path: ../neom_commons
+  #  neom_posts:
+  #    path: ../neom_posts
+  #  neom_inbox:
+  #    path: ../neom_inbox
+  #  neom_music_player:
+  #    path: ../neom_music_player
+  uuid: 4.4.0
+  rxdart: 0.28.0

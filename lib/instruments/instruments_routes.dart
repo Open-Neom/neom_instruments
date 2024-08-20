@@ -10,12 +10,12 @@ class InstrumentsRoutes {
     GetPage(
       name: AppRouteConstants.instrumentsFav,
       page: () => const InstrumentFavPage(),
-      transition: Transition.leftToRight,
+      transition: Transition.zoom,
     ),
     GetPage(
       name: AppRouteConstants.instruments,
       page: () => const InstrumentPage(),
-      transition: Transition.rightToLeft,
+      transition: Transition.downToUp,
     ),
   ];
 
