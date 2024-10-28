@@ -149,9 +149,13 @@ class GenresController extends GetxController implements GenresService {
         child: FilterChip(
           backgroundColor: AppColor.main50,
           avatar: CircleAvatar(
-            backgroundColor: Colors.cyan,
+            backgroundColor: Colors.cyan.shade500,
             child: Text(genre.name[0].toUpperCase(),
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 10,
+              ),
             ),
           ),
           label: Text(genre.name.capitalize, style: const TextStyle(fontSize: 12),),
