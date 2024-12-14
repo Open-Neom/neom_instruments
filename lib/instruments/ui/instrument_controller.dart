@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:neom_commons/core/app_flavour.dart';
 import 'package:neom_commons/core/data/firestore/instrument_firestore.dart';
 import 'package:neom_commons/core/data/implementations/app_drawer_controller.dart';
 import 'package:neom_commons/core/data/implementations/user_controller.dart';
@@ -10,6 +11,7 @@ import 'package:neom_commons/core/domain/model/instrument.dart';
 import 'package:neom_commons/core/utils/app_utilities.dart';
 import 'package:neom_commons/core/utils/constants/app_assets.dart';
 import 'package:neom_commons/core/utils/constants/app_page_id_constants.dart';
+import 'package:neom_commons/core/utils/enums/app_in_use.dart';
 
 import '../domain/use_cases/instrument_service.dart';
 
@@ -40,7 +42,7 @@ class InstrumentController extends GetxController implements InstrumentService {
   void onInit() async {
     super.onInit();
     logger.t("Instruments Init");
-    await loadInstruments();
+    if(AppFlavour.appInUse != AppInUse.c) await loadInstruments();
 
     if(userController.profile.instruments != null) {
       favInstruments = userController.profile.instruments!;
@@ -55,17 +57,23 @@ class InstrumentController extends GetxController implements InstrumentService {
   @override
   Future<void> loadInstruments() async {
     logger.t("loadInstruments");
-    String instrumentStr = await rootBundle.loadString(AppAssets.instrumentsJsonPath);
-    
-    List<dynamic> instrumentJSON = jsonDecode(instrumentStr);
-    List<Instrument> instrumentList = [];
-    for (var instrJSON in instrumentJSON) {
-      instrumentList.add(Instrument.fromJsonDefault(instrJSON));
+
+    try {
+      String instrumentStr = await rootBundle.loadString(AppAssets.instrumentsJsonPath);
+
+      List<dynamic> instrumentJSON = jsonDecode(instrumentStr);
+      List<Instrument> instrumentList = [];
+      for (var instrJSON in instrumentJSON) {
+        instrumentList.add(Instrument.fromJsonDefault(instrJSON));
+      }
+
+      logger.d("${instrumentList.length} loaded instruments from json");
+
+      instruments = { for (var e in instrumentList) e.name : e };
+    } catch(e) {
+      AppUtilities.logger.d(e.toString());
     }
 
-    logger.d("${instrumentList.length} loaded instruments from json");
-
-    instruments = { for (var e in instrumentList) e.name : e };
 
     isLoading = false;
     update([AppPageIdConstants.instruments]);
