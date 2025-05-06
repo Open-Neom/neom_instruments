@@ -1,4 +1,4 @@
-library neom_instruments;
+library;
 
 //GENRES DATA
 export 'genres/data/implementations/genres_controller.dart';

@@ -1,6 +1,6 @@
 name: neom_instruments
 description: Instruments and Genres for Cyberneom.
-version: 1.2.0
+version: 1.2.1
 homepage: https://github.com/Cyberneom/neom_instruments
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
@@ -15,16 +15,10 @@ dependencies:
   neom_commons:
     git:
       url: git@github.com:Cyberneom/neom_commons.git
-  neom_inbox:
-    git:
-      url: git@github.com:Cyberneom/neom_inbox.git
-  neom_posts:
-    git:
-      url: git@github.com:Cyberneom/neom_posts.git
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 flutter:
