@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:neom_commons/commons/utils/app_alerts.dart';
+import 'package:neom_commons/commons/utils/constants/app_translation_constants.dart';
+import 'package:neom_commons/commons/utils/constants/message_translation_constants.dart';
+import 'package:neom_core/core/domain/model/instrument.dart';
 
-import 'package:neom_commons/core/domain/model/instrument.dart';
-import 'package:neom_commons/core/utils/app_utilities.dart';
-import 'package:neom_commons/core/utils/constants/app_translation_constants.dart';
-import 'package:neom_commons/core/utils/constants/message_translation_constants.dart';
 import '../instrument_controller.dart';
 
 Widget buildInstrumentFavList(BuildContext context, InstrumentController _) {
@@ -27,7 +27,7 @@ Widget buildInstrumentFavList(BuildContext context, InstrumentController _) {
               ),
               onPressed: () {
                 _.makeMainInstrument(instrument);
-                AppUtilities.showAlert(context, title: AppTranslationConstants.instrumentsPreferences.tr,
+                AppAlerts.showAlert(context, title: AppTranslationConstants.instrumentsPreferences.tr,
                     message: "${instrument.name.tr} ${AppTranslationConstants.selectedAsMainInstrument.tr}");
               })
       );
@@ -56,19 +56,19 @@ Widget buildInstrumentList(BuildContext context, InstrumentController _) {
                   if (_.favInstruments.length > 1) {
                     await _.removeInstrument(index);
                     if(_.favInstruments.containsKey(instrument.id)) {
-                      AppUtilities.showAlert(context, title: instrument.name.tr, message: MessageTranslationConstants.instrumentNotRemoved.tr);
+                      AppAlerts.showAlert(context, title: instrument.name.tr, message: MessageTranslationConstants.instrumentNotRemoved.tr);
                     } else {
-                      AppUtilities.showAlert(context, title: instrument.name.tr, message: MessageTranslationConstants.instrumentRemoved.tr);
+                      AppAlerts.showAlert(context, title: instrument.name.tr, message: MessageTranslationConstants.instrumentRemoved.tr);
                     }
                   } else {
-                    AppUtilities.showAlert(context, title: instrument.name.tr, message: MessageTranslationConstants.atLeastOneInstrument.tr);
+                    AppAlerts.showAlert(context, title: instrument.name.tr, message: MessageTranslationConstants.atLeastOneInstrument.tr);
                   }
                 } else {
                   await _.addInstrument(index);
                   if(_.favInstruments.containsKey(instrument.id)) {
-                    AppUtilities.showAlert(context, title: instrument.name.tr, message: MessageTranslationConstants.instrumentAdded.tr);
+                    AppAlerts.showAlert(context, title: instrument.name.tr, message: MessageTranslationConstants.instrumentAdded.tr);
                   } else {
-                    AppUtilities.showAlert(context, title: instrument.name.tr, message: MessageTranslationConstants.instrumentNotAdded.tr);
+                    AppAlerts.showAlert(context, title: instrument.name.tr, message: MessageTranslationConstants.instrumentNotAdded.tr);
                   }
                 }
               }

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:geolocator/geolocator.dart';
-import 'package:neom_commons/core/domain/model/app_profile.dart';
+import 'package:neom_core/core/domain/model/app_profile.dart';
 
 abstract class ProfileInstrumentsRepository {
 

@@ -2,22 +2,22 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:neom_core/core/app_config.dart';
+import 'package:neom_core/core/data/firestore/constants/app_firestore_collection_constants.dart';
+import 'package:neom_core/core/domain/model/app_profile.dart';
+import 'package:neom_core/core/utils/enums/profile_type.dart';
+import 'package:neom_core/core/utils/position_utilities.dart';
 
-import 'package:neom_commons/core/data/firestore/constants/app_firestore_collection_constants.dart';
-import 'package:neom_commons/core/domain/model/app_profile.dart';
-import 'package:neom_commons/core/utils/app_utilities.dart';
-import 'package:neom_commons/core/utils/enums/profile_type.dart';
 import '../../domain/repository/profile_instruments_repository.dart';
 
 class ProfileInstrumentsFirestore implements ProfileInstrumentsRepository {
-
-  var logger = AppUtilities.logger;
+  
   final profileInstrumentsReference = FirebaseFirestore.instance.collection(AppFirestoreCollectionConstants.profileInstruments);
   int documentTimelineCounter = 0;
 
   @override
   Future<List<AppProfile>> retrieveAll() async {
-    logger.i("Retrieving ProfileInstruments to improve finding musicians.");
+    AppConfig.logger.i("Retrieving ProfileInstruments to improve finding musicians.");
 
     List<AppProfile> musicianProfiles = [];
 
@@ -32,7 +32,7 @@ class ProfileInstrumentsFirestore implements ProfileInstrumentsRepository {
         }
       }
     } catch (e) {
-    logger.e(e.toString());
+    AppConfig.logger.e(e.toString());
     }
 
     return musicianProfiles;
@@ -48,22 +48,24 @@ class ProfileInstrumentsFirestore implements ProfileInstrumentsRepository {
     int maxProfiles = 50,
   }) async {
 
-    logger.d("RetrievingProfiles by specs");
+    AppConfig.logger.d("RetrievingProfiles by specs");
 
     Map<String,AppProfile> mainInstrumentProfiles = <String, AppProfile>{};
     Map<String,AppProfile> noMainInstrumentProfiles = <String, AppProfile>{};
 
     try {
-      await profileInstrumentsReference
-          .get().then((querySnapshot) async {
+      await profileInstrumentsReference.get().then((querySnapshot) async {
         for (var document in querySnapshot.docs) {
           AppProfile profile = AppProfile.fromProfileInstruments(document.data());
-          profile.id = document.id;
+          profile.id = document. id;
+          AppConfig.logger.d("Profile ${profile.id} ${profile.name} to evaluate and retrieve");
+
+
           if(profile.id != selfProfileId && profile.type == ProfileType.appArtist
               && mainInstrumentProfiles.length < maxProfiles
-          ) {
+              && profile.position != null && currentPosition != null) {
 
-            if(AppUtilities.distanceBetweenPositionsRounded(profile.position!, currentPosition!) < maxDistance) {
+            if(PositionUtilities.distanceBetweenPositionsRounded(profile.position!, currentPosition) < maxDistance) {
               if(profile.instruments!.keys.contains(instrumentId)) {
                 if((instrumentId == profile.mainFeature)) {
                   mainInstrumentProfiles[profile.id] = profile;
@@ -72,8 +74,10 @@ class ProfileInstrumentsFirestore implements ProfileInstrumentsRepository {
                 }
               }
             } else {
-              logger.d("Profile ${profile.id} is out of max distance");
+              AppConfig.logger.t("Profile ${profile.id} ${profile.name} is out of max distance");
             }
+          } else {
+            AppConfig.logger.t("Profile ${profile.id} ${profile.name} not compatible with specs");
           }
         }
 
@@ -86,10 +90,10 @@ class ProfileInstrumentsFirestore implements ProfileInstrumentsRepository {
         }
       });
     } catch (e) {
-      logger.e(e.toString());
+      AppConfig.logger.e(e.toString());
     }
 
-    logger.d("${mainInstrumentProfiles.length} profiles found");
+    AppConfig.logger.d("${mainInstrumentProfiles.length} profiles found");
     return mainInstrumentProfiles;
   }
 

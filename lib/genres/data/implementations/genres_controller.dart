@@ -3,21 +3,20 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:neom_commons/core/data/firestore/genre_firestore.dart';
-import 'package:neom_commons/core/data/implementations/app_drawer_controller.dart';
-import 'package:neom_commons/core/data/implementations/user_controller.dart';
-import 'package:neom_commons/core/domain/model/app_profile.dart';
-import 'package:neom_commons/core/domain/model/genre.dart';
-import 'package:neom_commons/core/utils/app_color.dart';
-import 'package:neom_commons/core/utils/app_utilities.dart';
-import 'package:neom_commons/core/utils/constants/app_assets.dart';
-import 'package:neom_commons/core/utils/constants/app_page_id_constants.dart';
+import 'package:neom_commons/commons/ui/theme/app_color.dart';
+import 'package:neom_commons/commons/utils/constants/app_page_id_constants.dart';
+import 'package:neom_core/core/app_config.dart';
+import 'package:neom_core/core/data/firestore/genre_firestore.dart';
+import 'package:neom_core/core/data/implementations/app_drawer_controller.dart';
+import 'package:neom_core/core/data/implementations/user_controller.dart';
+import 'package:neom_core/core/domain/model/app_profile.dart';
+import 'package:neom_core/core/domain/model/genre.dart';
+import 'package:neom_core/core/utils/constants/data_assets.dart';
 
 import '../../domain/use_cases/genres_service.dart';
 
 class GenresController extends GetxController implements GenresService {
 
-  var logger = AppUtilities.logger;
   final userController = Get.find<UserController>();
 
   final RxMap<String, Genre> genres = <String, Genre>{}.obs;
@@ -32,7 +31,7 @@ class GenresController extends GetxController implements GenresService {
   @override
   void onInit() async {
     super.onInit();
-    logger.t("Genres Init");
+    AppConfig.logger.t("Genres Init");
     await loadGenres();
 
     if(userController.profile.genres != null) {
@@ -42,14 +41,12 @@ class GenresController extends GetxController implements GenresService {
     profile = userController.profile;
 
     sortFavGenres();
-
   }
-
 
   @override
   Future<void> loadGenres() async {
-    logger.t("loadGenres");
-    String genreStr = await rootBundle.loadString(AppAssets.genresJsonPath);
+    AppConfig.logger.t("loadGenres");
+    String genreStr = await rootBundle.loadString(DataAssets.genresJsonPath);
     
     List<dynamic> genresJSON = jsonDecode(genreStr);
     List<Genre> genresList = [];
@@ -57,7 +54,7 @@ class GenresController extends GetxController implements GenresService {
       genresList.add(Genre.fromJsonDefault(genreJSON));
     }
 
-    logger.d("${genresList.length} loaded genres from json");
+    AppConfig.logger.d("${genresList.length} loaded genres from json");
 
     genres.value = {for (var e in genresList) e.name : e};
 
@@ -68,12 +65,12 @@ class GenresController extends GetxController implements GenresService {
 
   @override
   Future<void> addGenre(int index) async {
-    logger.t("addGenre");
+    AppConfig.logger.t("addGenre");
 
     Genre genre = sortedGenres.values.elementAt(index);
     sortedGenres[genre.id]!.isFavorite = true;
 
-    logger.d("Adding genre ${genre.name}");
+    AppConfig.logger.d("Adding genre ${genre.name}");
     if(await GenreFirestore().addGenre(profileId: profile.id, genreId:  genre.name)){
       favGenres[genre.id] = genre;
     }
@@ -84,11 +81,11 @@ class GenresController extends GetxController implements GenresService {
 
   @override
   Future<void> removeGenre(int index) async {
-    logger.t("Removing Genre");
+    AppConfig.logger.t("Removing Genre");
     Genre genre = sortedGenres.values.elementAt(index);
 
     sortedGenres[genre.id]!.isFavorite = false;
-    logger.d("Removing genre ${genre.name}");
+    AppConfig.logger.d("Removing genre ${genre.name}");
 
     if(await GenreFirestore().removeGenre(profileId: profile.id, genreId: genre.id)){
       favGenres.remove(genre.id);
@@ -100,7 +97,7 @@ class GenresController extends GetxController implements GenresService {
 
   @override
   void makeMainGenre(Genre genre){
-    logger.d("Main genre ${genre.name}");
+    AppConfig.logger.d("Main genre ${genre.name}");
 
     String prevGenreId = "";
     for (var g in favGenres.values) {
@@ -117,9 +114,8 @@ class GenresController extends GetxController implements GenresService {
 
     profile.genres![genre.id] = genre;
     Get.find<AppDrawerController>().updateProfile(profile);
+
     update([AppPageIdConstants.genres]);
-
-
   }
 
   @override

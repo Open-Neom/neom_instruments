@@ -2,35 +2,26 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:neom_commons/core/app_flavour.dart';
-import 'package:neom_commons/core/data/firestore/instrument_firestore.dart';
-import 'package:neom_commons/core/data/implementations/app_drawer_controller.dart';
-import 'package:neom_commons/core/data/implementations/user_controller.dart';
-import 'package:neom_commons/core/domain/model/app_profile.dart';
-import 'package:neom_commons/core/domain/model/instrument.dart';
-import 'package:neom_commons/core/utils/app_utilities.dart';
-import 'package:neom_commons/core/utils/constants/app_assets.dart';
-import 'package:neom_commons/core/utils/constants/app_page_id_constants.dart';
-import 'package:neom_commons/core/utils/enums/app_in_use.dart';
+import 'package:neom_commons/commons/app_flavour.dart';
+import 'package:neom_commons/commons/utils/constants/app_page_id_constants.dart';
+import 'package:neom_core/core/app_config.dart';
+import 'package:neom_core/core/data/firestore/instrument_firestore.dart';
+import 'package:neom_core/core/data/implementations/app_drawer_controller.dart';
+import 'package:neom_core/core/data/implementations/user_controller.dart';
+import 'package:neom_core/core/domain/model/app_profile.dart';
+import 'package:neom_core/core/domain/model/instrument.dart';
+import 'package:neom_core/core/utils/constants/data_assets.dart';
+import 'package:neom_core/core/utils/enums/app_in_use.dart';
 
 import '../domain/use_cases/instrument_service.dart';
 
 class InstrumentController extends GetxController implements InstrumentService {
 
-  var logger = AppUtilities.logger;
   final userController = Get.find<UserController>();
 
-  final RxMap<String, Instrument> _instruments = <String,Instrument>{}.obs;
-  Map<String, Instrument> get instruments =>  _instruments;
-  set instruments(Map<String,Instrument> instruments) => _instruments.value = instruments;
-
-  final RxMap<String, Instrument> _favInstruments = <String,Instrument>{}.obs;
-  Map<String,Instrument> get favInstruments =>  _favInstruments;
-  set favInstruments(Map<String,Instrument> favInstruments) => _favInstruments.value = favInstruments;
-
-  final RxMap<String, Instrument> _sortedInstruments = <String,Instrument>{}.obs;
-  Map<String,Instrument> get sortedInstruments =>  _sortedInstruments;
-  set sortedInstruments(Map<String,Instrument> sortedInstruments) => _sortedInstruments.value = sortedInstruments;
+  RxMap<String, Instrument> instruments = <String,Instrument>{}.obs;
+  RxMap<String, Instrument> favInstruments = <String,Instrument>{}.obs;
+  RxMap<String, Instrument> sortedInstruments = <String,Instrument>{}.obs;
 
   final RxBool _isLoading = true.obs;
   bool get isLoading => _isLoading.value;
@@ -41,11 +32,11 @@ class InstrumentController extends GetxController implements InstrumentService {
   @override
   void onInit() async {
     super.onInit();
-    logger.t("Instruments Init");
+    AppConfig.logger.t("Instruments Init");
     if(AppFlavour.appInUse != AppInUse.c) await loadInstruments();
 
     if(userController.profile.instruments != null) {
-      favInstruments = userController.profile.instruments!;
+      favInstruments.value = userController.profile.instruments!;
     }
 
     profile = userController.profile;
@@ -56,10 +47,10 @@ class InstrumentController extends GetxController implements InstrumentService {
 
   @override
   Future<void> loadInstruments() async {
-    logger.t("loadInstruments");
+    AppConfig.logger.t("loadInstruments");
 
     try {
-      String instrumentStr = await rootBundle.loadString(AppAssets.instrumentsJsonPath);
+      String instrumentStr = await rootBundle.loadString(DataAssets.instrumentsJsonPath);
 
       List<dynamic> instrumentJSON = jsonDecode(instrumentStr);
       List<Instrument> instrumentList = [];
@@ -67,11 +58,11 @@ class InstrumentController extends GetxController implements InstrumentService {
         instrumentList.add(Instrument.fromJsonDefault(instrJSON));
       }
 
-      logger.d("${instrumentList.length} loaded instruments from json");
+      AppConfig.logger.d("${instrumentList.length} loaded instruments from json");
 
-      instruments = { for (var e in instrumentList) e.name : e };
+      instruments.value = { for (var e in instrumentList) e.name : e };
     } catch(e) {
-      AppUtilities.logger.d(e.toString());
+      AppConfig.logger.d(e.toString());
     }
 
 
@@ -81,12 +72,12 @@ class InstrumentController extends GetxController implements InstrumentService {
 
   @override
   Future<void>  addInstrument(int index) async {
-    logger.d("");
+    AppConfig.logger.d("");
 
     Instrument instrument = sortedInstruments.values.elementAt(index);
     sortedInstruments[instrument.id]!.isFavorite = true;
 
-    logger.i("Adding instrument ${instrument.name}");
+    AppConfig.logger.i("Adding instrument ${instrument.name}");
     InstrumentFirestore().addInstrument(profileId: profile.id, instrumentId:  instrument.name);
     favInstruments[instrument.id] = instrument;
         
@@ -96,11 +87,11 @@ class InstrumentController extends GetxController implements InstrumentService {
 
   @override
   Future<void> removeInstrument(int index) async {
-    logger.d("Removing Instrument");
+    AppConfig.logger.d("Removing Instrument");
     Instrument instrument = sortedInstruments.values.elementAt(index);
 
     sortedInstruments[instrument.id]!.isFavorite = false;
-    logger.d("Removing instrument ${instrument.name}");
+    AppConfig.logger.d("Removing instrument ${instrument.name}");
 
     ///DEPRECATED - NOT WAITING AS IS NOT NECESSARY TO VERIFY IT - ITS PREFERIBLE TO BE FASTER THAN CORRECT
     // if(await InstrumentFirestore().removeInstrument(profileId: profile.id, instrumentId: instrument.id)){
@@ -115,7 +106,7 @@ class InstrumentController extends GetxController implements InstrumentService {
 
   @override
   void makeMainInstrument(Instrument instrument){
-    logger.d("Main instrument ${instrument.name}");
+    AppConfig.logger.d("Main instrument ${instrument.name}");
 
     String prevInstrId = "";
     for (var instr in favInstruments.values) {
@@ -139,7 +130,7 @@ class InstrumentController extends GetxController implements InstrumentService {
   @override
   void sortFavInstruments(){
 
-    sortedInstruments = {};
+    sortedInstruments.value = {};
 
     for (var instrument in instruments.values) {
       if (favInstruments.containsKey(instrument.id)) {

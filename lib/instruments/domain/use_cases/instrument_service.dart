@@ -1,4 +1,5 @@
-import 'package:neom_commons/core/domain/model/instrument.dart';
+
+import 'package:neom_core/core/domain/model/instrument.dart';
 
 abstract class InstrumentService {
 

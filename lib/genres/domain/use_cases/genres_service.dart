@@ -1,4 +1,4 @@
-import 'package:neom_commons/core/domain/model/genre.dart';
+import 'package:neom_core/core/domain/model/genre.dart';
 
 abstract class GenresService {
 
