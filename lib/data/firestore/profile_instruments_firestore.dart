@@ -2,13 +2,12 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:neom_core/core/app_config.dart';
-import 'package:neom_core/core/data/firestore/constants/app_firestore_collection_constants.dart';
-import 'package:neom_core/core/domain/model/app_profile.dart';
-import 'package:neom_core/core/utils/enums/profile_type.dart';
-import 'package:neom_core/core/utils/position_utilities.dart';
-
-import '../../domain/repository/profile_instruments_repository.dart';
+import 'package:neom_core/app_config.dart';
+import 'package:neom_core/data/firestore/constants/app_firestore_collection_constants.dart';
+import 'package:neom_core/domain/model/app_profile.dart';
+import 'package:neom_core/domain/repository/profile_instruments_repository.dart';
+import 'package:neom_core/utils/enums/profile_type.dart';
+import 'package:neom_core/utils/position_utilities.dart';
 
 class ProfileInstrumentsFirestore implements ProfileInstrumentsRepository {
   

@@ -1,12 +1,11 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:neom_commons/commons/utils/app_alerts.dart';
-import 'package:neom_commons/commons/utils/constants/app_translation_constants.dart';
-import 'package:neom_commons/commons/utils/constants/message_translation_constants.dart';
-import 'package:neom_core/core/domain/model/instrument.dart';
+import 'package:neom_commons/utils/app_alerts.dart';
+import 'package:neom_commons/utils/constants/translations/app_translation_constants.dart';
+import 'package:neom_commons/utils/constants/translations/message_translation_constants.dart';
+import 'package:neom_core/domain/model/instrument.dart';
 
+import '../../utils/constants/instrument_translation_constants.dart';
 import '../instrument_controller.dart';
 
 Widget buildInstrumentFavList(BuildContext context, InstrumentController _) {
@@ -19,8 +18,8 @@ Widget buildInstrumentFavList(BuildContext context, InstrumentController _) {
       return ListTile(
           title: Text(instrument.name.tr.capitalizeFirst),
           subtitle: Text(instrument.isMain ?
-          "${AppTranslationConstants.mainInstrument.tr} ${instrumentLevel != AppTranslationConstants.notDetermined.tr ? " - $instrumentLevel" : ""}"
-              : instrumentLevel != AppTranslationConstants.notDetermined.tr ? instrumentLevel : ""),
+          "${AppTranslationConstants.mainInstrument.tr} ${instrumentLevel != InstrumentTranslationConstants.notDetermined.tr ? " - $instrumentLevel" : ""}"
+              : instrumentLevel != InstrumentTranslationConstants.notDetermined.tr ? instrumentLevel : ""),
           trailing: IconButton(
               icon: const Icon(
                 Icons.toc,
@@ -28,7 +27,7 @@ Widget buildInstrumentFavList(BuildContext context, InstrumentController _) {
               onPressed: () {
                 _.makeMainInstrument(instrument);
                 AppAlerts.showAlert(context, title: AppTranslationConstants.instrumentsPreferences.tr,
-                    message: "${instrument.name.tr} ${AppTranslationConstants.selectedAsMainInstrument.tr}");
+                    message: "${instrument.name.tr} ${InstrumentTranslationConstants.selectedAsMainInstrument.tr}");
               })
       );
     },
