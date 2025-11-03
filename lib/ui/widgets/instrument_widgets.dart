@@ -8,11 +8,11 @@ import 'package:neom_core/domain/model/instrument.dart';
 import '../../utils/constants/instrument_translation_constants.dart';
 import '../instrument_controller.dart';
 
-Widget buildInstrumentFavList(BuildContext context, InstrumentController _) {
+Widget buildInstrumentFavList(BuildContext context, InstrumentController controller) {
   return ListView.separated(
     separatorBuilder:  (context, index) => const Divider(),
     itemBuilder: (__, index) {
-      Instrument instrument = _.favInstruments.values.toList()[index];
+      Instrument instrument = controller.favInstruments.values.toList()[index];
       String instrumentLevel = instrument.instrumentLevel.name;
 
       return ListTile(
@@ -25,24 +25,24 @@ Widget buildInstrumentFavList(BuildContext context, InstrumentController _) {
                 Icons.toc,
               ),
               onPressed: () {
-                _.makeMainInstrument(instrument);
+                controller.makeMainInstrument(instrument);
                 AppAlerts.showAlert(context, title: AppTranslationConstants.instrumentsPreferences.tr,
                     message: "${instrument.name.tr} ${InstrumentTranslationConstants.selectedAsMainInstrument.tr}");
               })
       );
     },
-    itemCount: _.favInstruments.length,
+    itemCount: controller.favInstruments.length,
   );
 }
 
-Widget buildInstrumentList(BuildContext context, InstrumentController _) {
+Widget buildInstrumentList(BuildContext context, InstrumentController controller) {
   return ListView.separated(
-    itemCount: _.sortedInstruments.length,
+    itemCount: controller.sortedInstruments.length,
     separatorBuilder:  (context, index) => const Divider(),
     itemBuilder: (__, index) {
-      Instrument instrument = _.sortedInstruments.values.elementAt(index);
-      if (_.favInstruments[instrument.id] != null) {
-        instrument = _.favInstruments[instrument.id]!;
+      Instrument instrument = controller.sortedInstruments.values.elementAt(index);
+      if (controller.favInstruments[instrument.id] != null) {
+        instrument = controller.favInstruments[instrument.id]!;
       }
       return ListTile(
           title: Text(instrument.name.tr.capitalizeFirst),
@@ -52,9 +52,9 @@ Widget buildInstrumentList(BuildContext context, InstrumentController _) {
               ),
               onPressed: () async {
                 if(instrument.isFavorite) {
-                  if (_.favInstruments.length > 1) {
-                    await _.removeInstrument(index);
-                    if(_.favInstruments.containsKey(instrument.id)) {
+                  if (controller.favInstruments.length > 1) {
+                    await controller.removeInstrument(index);
+                    if(controller.favInstruments.containsKey(instrument.id)) {
                       AppAlerts.showAlert(context, title: instrument.name.tr, message: MessageTranslationConstants.instrumentNotRemoved.tr);
                     } else {
                       AppAlerts.showAlert(context, title: instrument.name.tr, message: MessageTranslationConstants.instrumentRemoved.tr);
@@ -63,8 +63,8 @@ Widget buildInstrumentList(BuildContext context, InstrumentController _) {
                     AppAlerts.showAlert(context, title: instrument.name.tr, message: MessageTranslationConstants.atLeastOneInstrument.tr);
                   }
                 } else {
-                  await _.addInstrument(index);
-                  if(_.favInstruments.containsKey(instrument.id)) {
+                  await controller.addInstrument(index);
+                  if(controller.favInstruments.containsKey(instrument.id)) {
                     AppAlerts.showAlert(context, title: instrument.name.tr, message: MessageTranslationConstants.instrumentAdded.tr);
                   } else {
                     AppAlerts.showAlert(context, title: instrument.name.tr, message: MessageTranslationConstants.instrumentNotAdded.tr);

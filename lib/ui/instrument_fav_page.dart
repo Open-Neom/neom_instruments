@@ -18,15 +18,15 @@ class InstrumentFavPage extends StatelessWidget {
     return GetBuilder<InstrumentController>(
       id: AppPageIdConstants.instruments,
       init: InstrumentController(),
-      builder: (_) => Scaffold(
+      builder: (controller) => Scaffold(
         appBar: AppBarChild(title: AppTranslationConstants.instruments.tr),
-        body: _.isLoading ? const Center(child: CircularProgressIndicator())
+        body: controller.isLoading ? const Center(child: CircularProgressIndicator())
             : Container(
           decoration: AppTheme.appBoxDecoration,
           child: Column(
               children: <Widget>[
                 Expanded(
-                  child: buildInstrumentFavList(context, _),
+                  child: buildInstrumentFavList(context, controller),
                 ),
               ]
           ),

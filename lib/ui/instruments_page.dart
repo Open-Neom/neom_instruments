@@ -16,7 +16,7 @@ class InstrumentPage extends StatelessWidget {
     return GetBuilder<InstrumentController>(
       id: AppPageIdConstants.instruments,
       init: InstrumentController(),
-      builder: (_) => Scaffold(
+      builder: (controller) => Scaffold(
         appBar:  PreferredSize(
           preferredSize: const Size.fromHeight(50),
           child: AppBarChild(title: InstrumentTranslationConstants.instrumentSelection.tr)),
@@ -25,7 +25,7 @@ class InstrumentPage extends StatelessWidget {
           child: Column(
               children: <Widget>[
                 Obx(()=> Expanded(
-                  child: buildInstrumentList(context, _),
+                  child: buildInstrumentList(context, controller),
                 ),),
               ]
           ),
