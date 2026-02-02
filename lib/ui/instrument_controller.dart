@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
+import 'package:sint/sint.dart';
 import 'package:neom_commons/utils/constants/app_page_id_constants.dart';
 import 'package:neom_core/app_config.dart';
 import 'package:neom_core/data/firestore/instrument_firestore.dart';
@@ -13,9 +13,9 @@ import 'package:neom_core/domain/use_cases/user_service.dart';
 import 'package:neom_core/utils/constants/data_assets.dart';
 import 'package:neom_core/utils/enums/app_in_use.dart';
 
-class InstrumentController extends GetxController implements InstrumentService {
+class InstrumentController extends SintController implements InstrumentService {
 
-  final userServiceImpl = Get.find<UserService>();
+  final userServiceImpl = Sint.find<UserService>();
 
   final RxMap<String, Instrument> _instruments = <String,Instrument>{}.obs;
   final RxMap<String, Instrument> _favInstruments = <String,Instrument>{}.obs;
@@ -120,7 +120,7 @@ class InstrumentController extends GetxController implements InstrumentService {
 
     profile.instruments![instrument.id] = instrument;
     profile.mainFeature = instrument.name;
-    Get.find<AppDrawerService>().updateProfile(profile);
+    Sint.find<AppDrawerService>().updateProfile(profile);
     update([AppPageIdConstants.instruments, AppPageIdConstants.profile]);
 
   }

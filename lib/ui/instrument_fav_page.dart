@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:sint/sint.dart';
 import 'package:neom_commons/ui/theme/app_theme.dart';
 import 'package:neom_commons/ui/widgets/appbar_child.dart';
 import 'package:neom_commons/utils/constants/app_page_id_constants.dart';
@@ -15,7 +15,7 @@ class InstrumentFavPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<InstrumentController>(
+    return SintBuilder<InstrumentController>(
       id: AppPageIdConstants.instruments,
       init: InstrumentController(),
       builder: (controller) => Scaffold(
@@ -34,7 +34,7 @@ class InstrumentFavPage extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           tooltip: InstrumentTranslationConstants.addInstrument.tr,
           onPressed: ()=>{
-            Get.toNamed(AppRouteConstants.instruments)
+            Sint.toNamed(AppRouteConstants.instruments)
           },
           child: const Icon(Icons.add),
         ),

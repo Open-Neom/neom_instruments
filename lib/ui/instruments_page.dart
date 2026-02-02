@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:sint/sint.dart';
 import 'package:neom_commons/ui/theme/app_theme.dart';
 import 'package:neom_commons/ui/widgets/appbar_child.dart';
 import 'package:neom_commons/utils/constants/app_page_id_constants.dart';
@@ -13,7 +13,7 @@ class InstrumentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<InstrumentController>(
+    return SintBuilder<InstrumentController>(
       id: AppPageIdConstants.instruments,
       init: InstrumentController(),
       builder: (controller) => Scaffold(
