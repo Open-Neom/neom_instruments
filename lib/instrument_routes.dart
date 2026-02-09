@@ -1,5 +1,6 @@
-import 'package:sint/sint.dart';
 import 'package:neom_core/utils/constants/app_route_constants.dart';
+import 'package:sint/sint.dart';
+
 import 'ui/instrument_fav_page.dart';
 import 'ui/instruments_page.dart';
 

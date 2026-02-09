@@ -1,28 +1,79 @@
-### 1.3.0 - Architectural Enhancements & Translations
+# Changelog
 
-This release for `neom_instruments` introduces significant architectural refinements, primarily focusing on enhancing decoupling and integrating module-specific translations, in line with the broader Open Neom refactoring efforts.
+All notable changes to neom_instruments will be documented in this file.
 
-**Key Architectural & Feature Improvements:**
+## [1.5.0] - 2026-02-08
 
-* **Service Decoupling for User Data:**
-    * The `InstrumentController` now interacts with user profile data through the `UserService` interface (instead of directly with `UserController`). This promotes the Dependency Inversion Principle (DIP), making the module more robust and testable by abstracting the user data source.
+### Added
+- Comprehensive README with ROADMAP 2026
+- Architecture documentation with directory structure
+- Usage examples for controller and navigation
+- Complete instrument translation constants (37 instruments)
+- Instrument catalog table by category
 
-* **Module-Specific Translations:**
-    * Introduced `InstrumentTranslationConstants` to centralize and manage all module-specific translation keys. This ensures that `neom_instruments`' UI text is easily localizable and maintainable, aligning with Open Neom's comprehensive internationalization strategy.
-    * Examples of new translation keys include: `instrumentSelection`, `addInstrument`, `notDetermined`, `selectedAsMainInstrument`, `instrumentPreferences`, `defaultInstrumentLevel`.
+### Documentation
+- Detailed Q1-Q4 2026 roadmap including:
+  - Skill levels and experience tracking
+  - Musician discovery and matching
+  - Learning integration and practice tracking
+  - Extended categories (DAWs, research tools)
 
-* **Enhanced Instrument Management:**
-    * Improved logic for loading instruments from a local JSON asset, making the instrument list readily available.
-    * Refined the process for adding, removing, and designating a "main" instrument for a user's profile.
-    * Enhanced sorting of instruments to prioritize favorited ones, improving user experience.
+### Changed
+- Updated flutter_lints to ^6.0.0
 
-* **Integration with Global Architectural Changes:**
-    * Adopts the updated service injection patterns established in `neom_core`'s recent refactor, ensuring consistent dependency management across the ecosystem.
-    * Benefits from consolidated utilities and shared UI components from `neom_commons`.
+## [1.4.0] - 2025-12-01
 
-**Overall Benefits of this Release:**
+### Added
+- Extended instrument name translations
+- All 37 instruments now have translation constants
 
-* **Increased Testability:** Decoupling from concrete controllers allows for easier mocking and unit testing of `InstrumentController`'s business logic.
-* **Improved Maintainability:** Clearer separation of concerns makes the module easier to understand, debug, and extend.
-* **Enhanced Localization:** Dedicated translation constants streamline the process of supporting multiple languages for instrument-related UI.
-* **Richer User Personalization:** Provides a more robust and flexible way for users to manage their instrument preferences, contributing to a more detailed profile.
+## [1.3.0] - 2025-10-15
+
+### Architectural Enhancements
+
+#### Service Decoupling
+- InstrumentController now uses UserService interface instead of UserController
+- Implemented Dependency Inversion Principle (DIP) for improved testability
+
+#### Module-Specific Translations
+- Introduced InstrumentTranslationConstants for all module-specific keys
+- Translation keys: instrumentSelection, addInstrument, notDetermined, selectedAsMainInstrument, etc.
+
+#### Enhanced Instrument Management
+- Improved logic for loading instruments from JSON asset
+- Refined add/remove/main instrument workflow
+- Enhanced sorting to prioritize favorites
+
+### Integration
+- Adopted updated service injection patterns from neom_core
+- Benefits from consolidated utilities from neom_commons
+
+## [1.2.0] - 2025-08-01
+
+### Added
+- InstrumentFavPage for managing favorite instruments
+- Main instrument designation feature
+- AppDrawerService integration for profile updates
+
+### Changed
+- Optimistic updates for faster UX (fire-and-forget Firestore calls)
+- Improved sorting algorithm for instrument display
+
+## [1.1.0] - 2025-06-15
+
+### Added
+- InstrumentsPage for full instrument catalog
+- JSON asset loading for instrument data
+- Firestore integration for persistence
+
+### Fixed
+- Duplicate instrument handling
+- Null safety for profile instruments
+
+## [1.0.0] - 2025-05-01
+
+### Initial Release
+- Basic instrument CRUD operations
+- Profile instrument integration
+- Favorite instruments management
+- Main instrument selection

@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:sint/sint.dart';
 import 'package:neom_commons/utils/constants/app_page_id_constants.dart';
 import 'package:neom_core/app_config.dart';
 import 'package:neom_core/data/firestore/instrument_firestore.dart';
@@ -12,6 +11,7 @@ import 'package:neom_core/domain/use_cases/instrument_service.dart';
 import 'package:neom_core/domain/use_cases/user_service.dart';
 import 'package:neom_core/utils/constants/data_assets.dart';
 import 'package:neom_core/utils/enums/app_in_use.dart';
+import 'package:sint/sint.dart';
 
 class InstrumentController extends SintController implements InstrumentService {
 

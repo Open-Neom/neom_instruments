@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sint/sint.dart';
 import 'package:neom_commons/ui/theme/app_theme.dart';
 import 'package:neom_commons/ui/widgets/appbar_child.dart';
 import 'package:neom_commons/utils/constants/app_page_id_constants.dart';
+import 'package:sint/sint.dart';
 
 import '../utils/constants/instrument_translation_constants.dart';
 import 'instrument_controller.dart';
