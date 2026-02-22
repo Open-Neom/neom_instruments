@@ -43,5 +43,9 @@ class InstrumentTranslationConstants {
   static const String viola = "viola";
   static const String violin = "violin";
   static const String xylophone = "xylophone";
-
+  static const String bajoQuinto = "bajoQuinto";
+  static const String bajoSexto = "bajoSexto";
+  static const String vihuela = "vihuela";
+  static const String charcheta = "charcheta";
+  
 }
