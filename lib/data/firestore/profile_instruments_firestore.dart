@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:neom_core/app_config.dart';
+import 'package:neom_core/utils/neom_error_logger.dart';
 import 'package:neom_core/data/firestore/constants/app_firestore_collection_constants.dart';
 import 'package:neom_core/domain/model/app_profile.dart';
 import 'package:neom_core/domain/repository/profile_instruments_repository.dart';
@@ -30,8 +31,8 @@ class ProfileInstrumentsFirestore implements ProfileInstrumentsRepository {
           musicianProfiles.add(musician);
         }
       }
-    } catch (e) {
-    AppConfig.logger.e(e.toString());
+    } catch (e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_instruments', operation: 'retrieveAll');
     }
 
     return musicianProfiles;
@@ -88,8 +89,8 @@ class ProfileInstrumentsFirestore implements ProfileInstrumentsRepository {
           });
         }
       });
-    } catch (e) {
-      AppConfig.logger.e(e.toString());
+    } catch (e, st) {
+      NeomErrorLogger.recordError(e, st, module: 'neom_instruments', operation: 'retrieveProfilesBySpecs');
     }
 
     AppConfig.logger.d("${mainInstrumentProfiles.length} profiles found");

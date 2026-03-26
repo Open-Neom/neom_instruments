@@ -25,7 +25,25 @@ class InstrumentController extends SintController implements InstrumentService {
   bool get isLoading => _isLoading.value;
   set isLoading(bool isLoading) => _isLoading.value = isLoading;
 
+  final RxString _searchQuery = ''.obs;
+  String get searchQuery => _searchQuery.value;
+  set searchQuery(String value) {
+    _searchQuery.value = value;
+    update([AppPageIdConstants.instruments]);
+  }
+
   AppProfile profile = AppProfile();
+
+  /// Returns instruments filtered by search query.
+  List<Instrument> get filteredInstruments {
+    final list = sortedInstruments.values.toList();
+    if (searchQuery.isEmpty) return list;
+    final query = searchQuery.toLowerCase();
+    return list.where((i) =>
+      i.name.toLowerCase().contains(query) ||
+      i.description.toLowerCase().contains(query)
+    ).toList();
+  }
 
   @override
   void onInit() async {
@@ -78,9 +96,21 @@ class InstrumentController extends SintController implements InstrumentService {
     AppConfig.logger.i("Adding instrument ${instrument.name}");
     InstrumentFirestore().addInstrument(profileId: profile.id, instrumentId:  instrument.name);
     favInstruments[instrument.id] = instrument;
-        
+
     sortFavInstruments();
     update([AppPageIdConstants.instruments]);
+  }
+
+  /// Add instrument by ID directly (used by card-based UI).
+  Future<void> addInstrumentById(String instrumentId) async {
+    final index = sortedInstruments.keys.toList().indexOf(instrumentId);
+    if (index >= 0) await addInstrument(index);
+  }
+
+  /// Remove instrument by ID directly (used by card-based UI).
+  Future<void> removeInstrumentById(String instrumentId) async {
+    final index = sortedInstruments.keys.toList().indexOf(instrumentId);
+    if (index >= 0) await removeInstrument(index);
   }
 
   @override
@@ -90,11 +120,6 @@ class InstrumentController extends SintController implements InstrumentService {
 
     _sortedInstruments[instrument.id]!.isFavorite = false;
     AppConfig.logger.d("Removing instrument ${instrument.name}");
-
-    ///DEPRECATED - NOT WAITING AS IS NOT NECESSARY TO VERIFY IT - ITS PREFERIBLE TO BE FASTER THAN CORRECT
-    // if(await InstrumentFirestore().removeInstrument(profileId: profile.id, instrumentId: instrument.id)){
-    //   favInstruments.remove(instrument.id);
-    // }
 
     InstrumentFirestore().removeInstrument(profileId: profile.id, instrumentId: instrument.id);
     favInstruments.remove(instrument.id);
