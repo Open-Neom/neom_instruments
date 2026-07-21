@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.0.0-unreleased] - 2026-07-21
+- Fix instrument favorites asymmetry by using instrument.id in both add and remove favorite operations.
+
 All notable changes to neom_instruments will be documented in this file.
 
 ## [1.5.0] - 2026-02-08

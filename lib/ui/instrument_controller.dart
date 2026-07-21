@@ -94,7 +94,7 @@ class InstrumentController extends SintController implements InstrumentService {
     _sortedInstruments[instrument.id]!.isFavorite = true;
 
     AppConfig.logger.i("Adding instrument ${instrument.name}");
-    InstrumentFirestore().addInstrument(profileId: profile.id, instrumentId:  instrument.name);
+    InstrumentFirestore().addInstrument(profileId: profile.id, instrumentId:  instrument.id);
     favInstruments[instrument.id] = instrument;
 
     sortFavInstruments();
@@ -139,7 +139,7 @@ class InstrumentController extends SintController implements InstrumentService {
       }
     }
     instrument.isMain = true;
-    favInstruments.update(instrument.name, (instrument) => instrument);
+    favInstruments.update(instrument.id, (v) => instrument);
     InstrumentFirestore().updateMainInstrument(profileId: profile.id,
       instrumentId: instrument.id, prevInstrId:  prevInstrId);
 
